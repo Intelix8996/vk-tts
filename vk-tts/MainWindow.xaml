@@ -19,6 +19,22 @@
             <Grid.Effect>
                 <BlurEffect Radius="0"/>
             </Grid.Effect>
+            <ListBox x:Name="ChatList" HorizontalAlignment="Left" Height="669" Margin="10,10,0,0" VerticalAlignment="Top" Width="370"/>
+            <TextBox x:Name="Chat" HorizontalAlignment="Left" Height="610" Margin="385,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="877" IsReadOnly="True" ScrollViewer.CanContentScroll="True"/>
+            <Button x:Name="RestartButton" Content="Logout" Style="{DynamicResource MaterialDesignToolButton}" HorizontalAlignment="Left" Margin="1188,647,0,0" VerticalAlignment="Top" Width="74" Click="RestartButton_Click"/>
+            <TextBox x:Name="MessageEnterBox" HorizontalAlignment="Left" Height="27" Margin="385,620,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="877" KeyDown="MessageEnterBox_KeyDown"/>
+
+            <Viewbox Margin="384,653,862,11">
+                <Canvas Width="23" Height="31">
+                    <Path Data="M9.62,12L12,5.67L14.37,12M11,3L5.5,17H7.75L8.87,14H15.12L16.25,17H18.5L13,3H11Z" Fill="Black" Height="27.72" Stretch="Fill" Width="24.966" Canvas.Left="4.017" Canvas.Top="7" />
+                </Canvas>
+            </Viewbox>
+            <Viewbox Margin="454,655,792,11" RenderTransformOrigin="0.5,0.5">
+                <Canvas Width="19" Height="24">
+                    <Path Data="M8,7A2,2 0 0,1 10,9V14A2,2 0 0,1 8,16A2,2 0 0,1 6,14V9A2,2 0 0,1 8,7M14,14C14,16.97 11.84,19.44 9,19.92V22H7V19.92C4.16,19.44 2,16.97 2,14H4A4,4 0 0,0 8,18A4,4 0 0,0 12,14H14M21.41,9.41L17.17,13.66L18.18,10H14A2,2 0 0,1 12,8V4A2,2 0 0,1 14,2H20A2,2 0 0,1 22,4V8C22,8.55 21.78,9.05 21.41,9.41Z" Fill="Black" Height="28.174" Stretch="Fill" Width="28.174" Canvas.Left="-9.174" />
+                </Canvas>
+            </Viewbox>
+            <CheckBox x:Name="speechButton" Content="" HorizontalAlignment="Left" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="414,657,0,0" VerticalAlignment="Top"/>
 
         </Grid>
 
@@ -26,8 +42,18 @@
         <TextBox x:Name="capchaInputBox" HorizontalAlignment="Left" Height="22" Margin="562,332,0,0" Text="Enter Capcha" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Opacity="0"/>
         <Image x:Name="capchaImage" HorizontalAlignment="Left" Height="60" Margin="562,226,0,0" VerticalAlignment="Top" Width="120" Opacity="0"/>
 
-        <TextBox x:Name="loginInputBox" HorizontalAlignment="Left" Height="23" Margin="562,304,0,0" TextWrapping="Wrap" Text="Login" VerticalAlignment="Top" Width="120" Opacity="0"/>
-        <TextBox x:Name="passwordInputBox" HorizontalAlignment="Left" Height="22" Margin="562,363,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Width="120" Opacity="0"/>
+        <Viewbox x:Name="loginIcon" Margin="521,304,715,342" Opacity="0">
+            <Canvas Width="24" Height="24">
+                <Path Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" Fill="Black" Canvas.Top="-6" Canvas.Left="6.666" />
+            </Canvas>
+        </Viewbox>
+        <TextBox x:Name="loginInputBox" HorizontalAlignment="Left" Height="23" Margin="562,304,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Opacity="0"/>
+        <Viewbox x:Name="passwordIcon" Margin="521,363,715,279" Opacity="0">
+            <Canvas Width="24" Height="24">
+                <Path Data="M17,7H22V17H17V19A1,1 0 0,0 18,20H20V22H17.5C16.95,22 16,21.55 16,21C16,21.55 15.05,22 14.5,22H12V20H14A1,1 0 0,0 15,19V5A1,1 0 0,0 14,4H12V2H14.5C15.05,2 16,2.45 16,3C16,2.45 16.95,2 17.5,2H20V4H18A1,1 0 0,0 17,5V7M2,7H13V9H4V15H13V17H2V7M20,15V9H17V15H20M8.5,12A1.5,1.5 0 0,0 7,10.5A1.5,1.5 0 0,0 5.5,12A1.5,1.5 0 0,0 7,13.5A1.5,1.5 0 0,0 8.5,12M13,10.89C12.39,10.33 11.44,10.38 10.88,11C10.32,11.6 10.37,12.55 11,13.11C11.55,13.63 12.43,13.63 13,13.11V10.89Z" Fill="Black" Canvas.Top="-11.167" Canvas.Left="5.166" />
+            </Canvas>
+        </Viewbox>
+        <PasswordBox x:Name="passwordInputBox" HorizontalAlignment="Left" Height="22" Margin="562,363,0,0" VerticalAlignment="Top" Width="120" Opacity="0"/>
         <Button x:Name="loginButton" Content="Login" HorizontalAlignment="Left" Margin="583,427,0,0" VerticalAlignment="Top" Width="75" Opacity="0" Click="loginButton_Click"/>
         <CheckBox x:Name="savePasswordCheckBox" Content="Save Password" HorizontalAlignment="Left" Margin="562,484,0,0" VerticalAlignment="Top" Opacity="0"/>
 
