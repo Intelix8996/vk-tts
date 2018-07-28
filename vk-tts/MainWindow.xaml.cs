@@ -111,6 +111,7 @@ namespace vk_tts
 
                 capchaImage.Source = new BitmapImage(new Uri(cEx.Img.AbsoluteUri));
             }
+            catch { MessageBox.Show("Неизвесная ошибка."); }
 
             if (savePasswordCheckBox.IsChecked == true)
             {
@@ -137,9 +138,10 @@ namespace vk_tts
             string baseUrl = "https://" + LongPollServer.Server + "?act=a_check&key=" + LongPollServer.Key + "&ts=" + ts + "&wait=25&mode=2&version=2 ";
             LongPollResponse Response;
 
-            using (WebClient clinet = new WebClient())
+            using (WebClient client = new WebClient())
             {
-                string rawResponse = await clinet.DownloadStringTaskAsync(new Uri(baseUrl));
+                client.Encoding = Encoding.UTF8;
+                string rawResponse = await client.DownloadStringTaskAsync(new Uri(baseUrl));
 
                 if (rawResponse.Contains("title"))
                 {
@@ -164,7 +166,7 @@ namespace vk_tts
             LongPollServerLoop(Response.ts);
         }
 
-        void HandleLongPollResponse(LongPollResponse Response)
+        async void HandleLongPollResponse(LongPollResponse Response)
         {
 
             foreach (string[] rawCommand in Response.updates)
@@ -172,13 +174,52 @@ namespace vk_tts
                 switch (rawCommand[0])
                 {
                     case "4":
+                        ulong[] ids = new ulong[1];
+                        ids[0] = Convert.ToUInt64(rawCommand[1]);
 
-                        if (ChatID != Convert.ToInt32(rawCommand[3]))
-                            Chat.AppendText("Пользователь " + GetNameByID(Convert.ToInt64(rawCommand[3])) + " отправил сообщение: " + rawCommand[5]);
-                        else if (GetNameByID(Convert.ToInt64(rawCommand[3])) != "Вы")
-                            Chat.AppendText(rawCommand[5] + " ---- " + GetNameByID(Convert.ToInt64(rawCommand[3])));
+                        var msg = await api.Messages.GetByIdAsync(ids);
+                        long messageFromID = (long)msg[0].FromId;
+
+                        if (GetNameByID(messageFromID) != "Вы" && ChatID == messageFromID)
+                        {
+                            Chat.AppendText("\n\n" + rawCommand[5] + " ---- " + GetNameByID(messageFromID));
+                            Chat.ScrollToEnd();
+                        }
+
+                        AppendServiceInfo("Пользователь " + GetNameByID(messageFromID) + " отправил сообщение: \"" + rawCommand[5] + "\"; ", rawCommand);
+                        break;
+
+                    case "8":
+                        AppendServiceInfo("Пользователь " + GetNameByID(Convert.ToInt64(rawCommand[1].Remove(0, 1))) + " зашёл в сеть. ", rawCommand);
+                        break;
+                    case "9":
+                        AppendServiceInfo("Пользователь " + GetNameByID(Convert.ToInt64(rawCommand[1].Remove(0, 1))) + " вышел из сети. ", rawCommand);
+                        break;
+                    case "61":
+                        AppendServiceInfo("Пользователь " + GetNameByID(Convert.ToInt64(rawCommand[1].Remove(0, 1))) + " набирает сообщение. ", rawCommand);
+                        break;
+                    case "62":
+                        AppendServiceInfo("Пользователь " + GetNameByID(Convert.ToInt64(rawCommand[1].Remove(0, 1))) + " набирает сообщение. ", rawCommand);
+                        break;
+                    default:
+                        AppendServiceInfo("Событие: \"" + rawCommand[0] + "\" ", rawCommand);
                         break;
                 }
+            }
+        }
+
+        void AppendServiceInfo(string message, string[] args)
+        {
+            if (DebugCheckBox.IsChecked == true)
+            {
+                Chat.AppendText("\n\n" + message);
+
+                for (int i = 0; i < args.Length; ++i)
+                {
+                    Chat.AppendText(" Argument " + Convert.ToString(i) + ": \"" + args[i] + "\";");
+                }
+
+                Chat.ScrollToEnd();
             }
         }
 
@@ -452,15 +493,19 @@ namespace vk_tts
 
             ShowLoadingScreen();
 
-            await api.AuthorizeAsync(new ApiAuthParams
+            try
             {
-                ApplicationId = 6630347,
-                Login = Login,
-                Password = Password,
-                Settings = Settings.All,
-                CaptchaKey = Convert.ToString(capchaInputBox.Text),
-                CaptchaSid = _cex.Sid
-            });
+                await api.AuthorizeAsync(new ApiAuthParams
+                {
+                    ApplicationId = 6630347,
+                    Login = Login,
+                    Password = Password,
+                    Settings = Settings.All,
+                    CaptchaKey = Convert.ToString(capchaInputBox.Text),
+                    CaptchaSid = _cex.Sid
+                });
+            }
+            catch { MessageBox.Show("Неизвесная ошибка."); }
 
             HideLoadingScreen();
         }
